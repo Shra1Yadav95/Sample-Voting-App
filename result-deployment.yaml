@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: result
+  name: result
+  namespace: vote
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "result-service"
+    port: 5001
+    targetPort: 80
+  selector:
+    app: result
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ labels:
+  app: result
+ name: result
+ namespace: vote
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: result
+ template:
+  metadata:
+   labels:
+    app: result
+  spec:
+   containers:
+    - name: result
+      image: shra1yadav/myresult
+      ports:
+       - containerPort: 80
+         name: result
